@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    // 未使用柯里化
+    // function sum(a,b,c){
+    //   return a+b+c
+    // }
+
+    // 使用柯里化
+    function sum(a) {
+        return (b) => {
+            return (c) => {
+                return a + b + c
+            }
+        }
+    }
+
+    // console.log(sum(1,2,3))
+    console.log(sum(1)(2)(3))
+</script>
+</html>

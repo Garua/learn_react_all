@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+
+<!--
+        新版本中所有带Will的生命周期函数都加了UNSAFE_前缀
+        componentWillMount,componentWillReceiveProps,componentWillUpdate
+        ,除了componentWillUnmount()
+
+        1.初始化阶段:由ReactDOM.render()触发-- 初次渲染
+            1.constructor()
+            2.getDerivedStateFromProps()
+            3.render()
+            4.componentDidMount()
+        2.更新阶段:由组件内部this.setState()或者父组件重新render()触发
+            1.getDerivedStateFromProps()
+            2.shouldComponentUpdate()
+            3.render()
+            4.getSnapshotBeforeUpdate()
+        3.卸载组件:由ReactDOM.unmountComponentAtNode()触发
+            1.componentWillUnmount()
+
+-->
+<script type="text/babel">
+    class Count extends React.Component {
+        constructor(props) {
+            console.log('Count-->constructor')
+            super(props);
+            // 初始化状态
+            this.state = {count: 0}
+        }
+
+        // 不是实例方法,从props得到派生state
+        // 若state的值任何时候都取决于props时,可以使用
+        static getDerivedStateFromProps(props, state) {
+            console.log('Count-->getDerivedStateFromProps', props, state)
+            //
+            return null
+        }
+
+        // 更新之前获取快照
+        // 此生命周期的任何返回值都将作为参数传递给componentDidUpdate
+        getSnapshotBeforeUpdate() {
+            console.log('Count-->getSnapshotBeforeUpdate')
+            return 'hello'
+        }
+
+
+        // 组件更新完成时调用
+        componentDidUpdate(a,b,c) {
+            // 默认有两个参数 ,第一个上一次是props,b是上一次的状态,c是getSnapshotBeforeUpdate传递的参数
+            console.log('Count-->componentDidUpdate',a,b,c)
+
+        }
+
+
+        componentDidMount() {
+            console.log('Count-->componentDidMount')
+
+        }
+
+        // 将要卸载时调用
+        componentWillUnmount() {
+            console.log('Count-->componentWillUnmount')
+
+        }
+
+        // 将要更新的时候调用，如果返回false,组件不会更新，相当于一个阀门
+        // 如果此方法返回false，那么 render,componentWillUpdate,componentDidUpdate都不会调用
+        shouldComponentUpdate() {
+            console.log('Count-->shouldComponentUpdate')
+            return true
+        }
+
+
+
+        render() {
+            console.log('Count-->render')
+
+            const {count} = this.state
+            return (
+                <div>
+                    <h2>当前求和为:{count}</h2>
+                    <button onClick={this.add}>点我+1</button>
+                    <button onClick={this.death}>卸载组件</button>
+                    <button onClick={this.force}>不更改状态数据，强制更新</button>
+                </div>
+            )
+        }
+
+        add = () => {
+            const {count} = this.state
+            this.setState({count: count + 1})
+        }
+        death = () => {
+            ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+        }
+
+        force = () => {
+            // 强制更新,正常更新会走shouldComponentUpdate这个阀门
+            // 这个方法会跳过阀门，无论状态有无改变，都会调用render
+            // 该方法不需要自己写
+            this.forceUpdate()
+        }
+    }
+
+
+    ReactDOM.render(<Count count={199}/>, document.getElementById('test'))
+</script>
+</html>

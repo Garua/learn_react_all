@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+
+<script type="text/babel">
+    class Demo extends React.Component {
+        // React.createRef调用后可以返回一个容器，该容器（专人专用，后放入的会把之前的替换掉）可以
+        // 存储被ref所标识的结点,myRef中存储了该Input结点
+        myRef = React.createRef()
+        render() {
+            return (
+                <div>
+                    <input ref={this.myRef} type="text"/><br/>
+                    <button onClick={this.showInfo}>点我提示输入的数据</button>
+                </div>
+            )
+        }
+
+
+        showInfo = () => {
+            const {myRef} = this
+            console.log(myRef.current.value)
+        }
+
+    }
+
+    ReactDOM.render(<Demo/>, document.getElementById('test'))
+
+</script>
+</html>

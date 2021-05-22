@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+
+<script type="text/babel">
+    class Person extends React.Component {
+        render() {
+            console.log(this)
+            const {name, age, sex} = this.props
+            return (
+                <ul>
+                    <li>姓名：{name}</li>
+                    <li>性别：{sex}</li>
+                    <li>年龄：{age + 1}</li>
+                </ul>
+            )
+        }
+    }
+
+    // 如果属性值是数字，请用这种方式传递：age={19},不然在做年龄的加法运算是，会是字符串拼接
+    ReactDOM.render(<Person name='tom' age='18' sex='女'/>, document.getElementById('test'))
+    //age转数字
+    const p = {name: '老王', age: 99, sex: '女'}
+    //(1) ReactDOM.render(<Person name={p.name} age={p.age} sex={p.sex}/>,document.getElementById('test'))
+
+    //这种是(1)处的简写，...展开运算符，这里的{...p}和原始的(复习中的展开运算符)不是一个意思
+    // react + babel ...就变成了展开对象(仅仅适用于标签属性的传递)，console.log(...p)不会有效果
+    ReactDOM.render(<Person {...p}/>, document.getElementById('test'))
+</script>
+</html>

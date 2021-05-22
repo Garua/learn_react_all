@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript">
+    /**
+     * 如果A类继承了B类，且A中写了构造器，那么首先super是必须写的
+     */
+    class Person {
+        constructor(name, age) {
+            // this指向实例对象
+            this.name = name;
+            this.age = age;
+        }
+
+        speak() {
+            //speak放在了类的原型对象，给实例使用
+            // 通过Person实例直接调用时，this指向调用的实例
+            console.log(this)
+            console.log(`我叫${this.name},今年${this.age}`)
+        }
+    }
+
+    class Student extends Person {
+        constructor(name, age, grade) {
+            super(name,age);
+            this.grade = grade
+        }
+        // 重写父类的方法
+        speak() {
+            console.log(`我叫${this.name},今年${this.age},上${this.grade}`)
+        }
+        study(){
+            //通过Student实例调用study,this指向该Student实例
+            console.log('好好学习，天天身上')
+        }
+    }
+
+    const p1 = new Person('tom', 123)
+    const p2 = new Person('jerry', 19)
+    console.log(p1)
+    console.log(p2)
+    p1.speak()
+    p2.speak()
+    // call返回一个新函数，并更改this指向
+    // p1.speak.call({a: 1, b: 2})
+    const s1 = new Student('小王', 33, '高一');
+    console.log(s1)
+    s1.speak()
+</script>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+
+  let arr1 = [1,3,5,7,9]
+  let arr2 = [2,4,6,8,10]
+  // 展开数组
+  console.log(...arr1,...arr2)
+  //连接数组
+  let arr3 = [...arr1,...arr2]
+  console.log(arr3)
+
+  // 函数中使用...,可变参数
+  function sum(...numbers){
+   return  numbers.reduce((pV,cV)=>{
+      return pV+cV
+    })
+  }
+  console.log(sum(1,2))
+  // ...不能展开一个对象
+  let p = {name:'tom',age:13,sex:'男'}
+  // p = p2这种是引用复制，p,p2指向同一个对象，两者修改会影响
+
+  // 复制对象(字面量形式)
+  let p2 = {...p}
+  // console.log(...p) 报错。
+  console.log(p2)
+
+  // 复制对象的同时，修改某些属性值，address追加属性
+  let p3 = {...p,name:'老王',address:'快乐星球'}
+  console.log(p3)
+
+
+
+
+
+</script>
+</body>
+</html>

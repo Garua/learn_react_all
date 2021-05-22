@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--
+        目标：页面加载完成时，h2的透明度从1降到0再从0到1，一直循环
+
+-->
+<script type="text/babel">
+    class Life extends React.Component {
+        state = {opacity: 1}
+
+        render() {
+            // 状态一改变，render()调用，render()调用，开启定时器
+            // 如果把定时器放在render里面，会导致严重问题
+
+            return (
+                <div>
+                    <h2 style={{opacity: this.state.opacity}}>React学不会怎么办？</h2>
+                    <button onClick={this.death}>不活了</button>
+                    {/*<button onClick={this.action}>开始变化</button>)*/}
+                </div>
+            )
+        }
+
+        //组件完成挂载时调用
+        componentDidMount() {
+            // 给this上挂载了一个新属性，在取消时，方便清除定时器，才不会报错
+            this.timer = setInterval(() => {
+                // 获取原状态
+                let {opacity} = this.state
+                opacity -= 0.1
+                if (opacity <= 0) {
+                    opacity = 1
+                }
+                // this.setState({opacity:opacity})
+                // 变量和值同名时，可以简写
+                this.setState({opacity})
+            }, 200)
+        }
+
+        // 组件将卸载时调用
+        componentWillUnmount() {
+            console.log('222')
+            // 清除定时器
+            clearInterval(this.timer)
+        }
+
+        death = () => {
+            // 清除定时器
+            // clearInterval(this.timer)
+            // 卸载组件（从页面上移除）
+            ReactDOM.unmountComponentAtNode(document.getElementById('test'))
+        }
+        action = () => {
+            setInterval(() => {
+                // 获取原状态
+                let {opacity} = this.state
+                opacity -= 0.1
+                if (opacity <= 0) {
+                    opacity = 1
+                }
+                // this.setState({opacity:opacity})
+                // 变量和值同名时，可以简写
+                this.setState({opacity})
+            }, 200)
+        }
+
+
+    }
+
+    ReactDOM.render(<Life/>, document.getElementById('test'))
+</script>
+</html>

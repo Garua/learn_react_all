@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--状态驱动页面显示-->
+<!--此处type是text/babel-->
+<!--
+                     <input ref={(a)=>{console.log(a)}}  type='text' placeholder="点击按钮提示数据"/>&nbsp;&nbsp;
+                    a这里a就是该input结点
+                    ref={(a)=>{this.input1=a} 这样就把该结点，添加到对应的实例上了
+-->
+<script type="text/babel">
+    class Demo extends React.Component{
+        render(){
+           return (
+               <div>
+                     <input ref={c=>this.input1=c}  type='text' placeholder="点击按钮提示数据"/>&nbsp;&nbsp;
+                   <button onClick={this.showData}>点我提示左侧数据</button>&nbsp;&nbsp;
+                   <input type='text' onBlur={this.showData2}  placeholder="失去焦点提示数据"/>
+
+               </div>
+           )
+        }
+        showData = ()=>{
+            // ref={c=>this.input1=c} 给实例身上挂载了一个c，c就是这个input结点
+            const {input1} = this
+            alert(input1.value)
+        }
+        // 这里可以不用ref,因为有事件的标签和我们要操作的标签是同一个
+        showData2 = (event)=>{
+            console.log(event.target.value)
+        }
+    }
+    ReactDOM.render(<Demo/>,document.getElementById('test'))
+
+</script>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<!--引入这个对标签属性进行限制，多了一个全局PropTypes对象-->
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<body>
+<div id="test"></div>
+<div id="test1"></div>
+<div id="test2"></div>
+</body>
+
+<script type="text/babel">
+    // 对标签属性值的类型，以及是否必须，默认值限制
+    class Person extends React.Component {
+        render() {
+            // 不能在类里面对props里面的值进行修改，它是只读的，
+            // 只能在标签上修改
+            console.log(this)
+            const {name, age, sex} = this.props
+            return (
+                <ul>
+                    <li>姓名：{name}</li>
+                    <li>性别：{sex}</li>
+                    <li>年龄：{age + 1}</li>
+                </ul>
+            )
+        }
+    }
+
+    // propTypes固定写法
+    Person.propTypes = {
+        // react 15.几版本，React身上有PropTypes，后面独立提取出来了
+        // name:React.PropTypes.string.required 弃用了
+        // 名字是字符串，且必传
+        name: PropTypes.string.isRequired,
+        sex:PropTypes.string,
+        age:PropTypes.number,
+        // 限制类型为函数
+        speak:PropTypes.func
+    }
+
+    // 给未传的属性设置默认值
+    Person.defaultProps={
+        sex:'不男不女',
+        age:18
+    }
+    // 所以有必要对标签属性进行某些限制，不然使用者不知道传递什么类型，以及是否可以不传
+    ReactDOM.render(<Person name='jerry'  sex='女' speak={speak}/>, document.getElementById('test'))
+    ReactDOM.render(<Person name='tom' age={34} />, document.getElementById('test1'))
+    //age转数字
+    const p = {name: '老王', age: 99, sex: '女'}
+
+    ReactDOM.render(<Person {...p}/>, document.getElementById('test2'))
+    function speak(){
+        console.log('我说话了。')
+    }
+</script>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--
+  受控组件
+    页面中所有输入的dom，随着值的改变，就把值维护到状态中，要用的时候从状态中取，这就是受控组件
+-->
+<script type="text/babel">
+    // name="username";name="password"要有这个name属性，默认get请求
+    // 不然跳转到action地址时，url后面只有一个？,没有参数
+    class Login extends React.Component {
+        // 初始化状态中的用户名和密码
+        state = {username:'',password:''}
+        render() {
+            return (
+                <form onSubmit={this.handleSubmit}>
+                    用户名：<input onChange={this.changeUsername} type="text" name="username"/>
+                    密码：<input onChange={this.changePassword} type="password" name="password"/>
+                    <button>登录</button>
+                </form>
+            )
+        }
+        changeUsername = (event)=>{
+            // 保存用户名到状态中
+            this.setState({username:event.target.value})
+        }
+        changePassword = (event)=>{
+            // 保存密码到状态中
+            this.setState({password:event.target.value})
+        }
+        handleSubmit = () => {
+            event.preventDefault();
+            // 登录时到状态中取值，
+            console.log(`输入的用户名：${this.state.username},密码：${this.state.password}`)
+        }
+
+
+    }
+
+
+    ReactDOM.render(<Login/>, document.getElementById('test'))
+
+</script>
+</html>

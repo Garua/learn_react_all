@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+
+<script type="text/babel">
+    class Time extends React.Component{
+        state = {date:new Date()}
+        componentDidMount(){
+            setInterval(()=>{
+                this.setState({
+                    date:new Date()
+                })
+            },1000)
+        }
+
+        render() {
+            // h1和input不会重新渲染,因为Input中输入值,不会被刷新
+            return (
+                <div>
+                    <h1>hello</h1>
+                    <input type='text' />
+                    <span>现在是:{this.state.date.toTimeString()}</span>
+                </div>
+            );
+        }
+    }
+    ReactDOM.render(<Time/>,document.getElementById('test'))
+</script>
+</html>

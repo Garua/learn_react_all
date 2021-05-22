@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--
+
+    input类型的框：需要时从字段中“拉出”值。提交表单时可能会发生这种情况。(现用现取)
+
+-->
+<script type="text/babel">
+    // name="username";name="password"要有这个name属性，默认get请求
+    // 不然跳转到action地址时，url后面只有一个？,没有参数
+    class Login extends React.Component {
+        render() {
+            return (
+                <form onSubmit={this.handleSubmit}>
+                    用户名：<input ref={c =>this.username=c} type="text" name="username"/>
+                    密码：<input ref={c =>this.password=c} type="password" name="password"/>
+                    <button>登录</button>
+                </form>
+            )
+        }
+
+        handleSubmit = () => {
+            event.preventDefault() // 阻止表单提交的默认事件,页面不会有刷新的动作，输入的值也还在，使用ajax交互
+            const {username,password} = this
+            console.log(username.value,password.value)
+        }
+
+
+    }
+
+
+    ReactDOM.render(<Login/>, document.getElementById('test'))
+
+</script>
+</html>

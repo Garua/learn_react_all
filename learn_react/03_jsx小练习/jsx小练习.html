@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<script type="text/babel">
+    // 模拟一些数据
+    const data = ['Angular', 'Vue', 'React']
+    // 对象不能自动遍历，会报错。
+    const obj = {name: '11', name2: '222', name: '333'}
+    //下面div中的{}表示写js表达式，写js表达式时用{}
+    /**
+     * js表达示和js代码的区别
+     * 表达式：a,a+b,demo(1),arr.map(),function(){}
+     * 语句：if(){},for(){},switch(){case:xxx},
+     *
+     */
+    const VDom = (
+        <div>
+            <h1>前端js框架列表</h1>
+            <ul>
+                {data.map((a, index) => {
+                    return <li key={index}>{a}</li>
+                } )}
+            </ul>
+        </div>
+    )
+    ReactDOM.render(VDom, document.getElementById('test'))
+</script>
+</html>

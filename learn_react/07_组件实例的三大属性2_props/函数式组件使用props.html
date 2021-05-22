@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<!--引入这个对标签属性进行限制，多了一个全局PropTypes对象-->
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<body>
+<div id="test"></div>
+
+</body>
+
+<script type="text/babel">
+    // class Person extends React.Component {
+    //     // 构造器能够接收到props
+    //     // 通常React中构造函数仅用于以下两种情况
+    //     // 1、通过this.state赋值对象来初始化内部state,2、为事件处理函数绑定实例
+    //     constructor(props) {
+    //         super(props)
+    //         console.log(props)
+    //         // 如果要在构造器中使用this.props，构造器要接收props作为参数，super也是，否则构造器和super都可以无参数
+    //     }
+    //
+    //
+    //     render() {
+    //         // 不能在类里面对props里面的值进行修改，它是只读的，
+    //         // 只能在标签上修改
+    //         console.log(this)
+    //         const {name, age, sex} = this.props
+    //         return (
+    //             <ul>
+    //                 <li>姓名：{name}</li>
+    //                 <li>性别：{sex}</li>
+    //                 <li>年龄：{age + 1}</li>
+    //             </ul>
+    //         )
+    //     }
+    //
+    //     //Person.propTypes 删除Person.、static就表示给类自身加，去掉static就是给类的实例加
+    //     // 对比java中static
+    //     static propTypes = {
+    //         // react 15.几版本，React身上有PropTypes，后面独立提取出来了
+    //         // name:React.PropTypes.string.required 弃用了
+    //         // 名字是字符串，且必传
+    //         name: PropTypes.string.isRequired,
+    //         sex: PropTypes.string,
+    //         age: PropTypes.number,
+    //     }
+    //     static defaultProps = {
+    //         sex: '不男不女',
+    //         age: 18
+    //     }
+    // }
+
+    // 函数式组件也能使用prop,也能作类型限制
+    function Person(props) {
+        const {name,age,sex} = props
+        return (
+            <ul>
+                <li>姓名：{name}</li>
+                <li>性别：{sex}</li>
+                <li>年龄：{age + 1}</li>
+            </ul>
+        )
+    }
+    Person.propTypes = {
+        // react 15.几版本，React身上有PropTypes，后面独立提取出来了
+        // name:React.PropTypes.string.required 弃用了
+        // 名字是字符串，且必传
+        name: PropTypes.string.isRequired,
+        sex: PropTypes.string,
+        age: PropTypes.number,
+    }
+    Person.defaultProps = {
+        sex: '不男不女',
+        age: 18
+    }
+
+    ReactDOM.render(<Person name='jerry' age={12} sex='女'/>, document.getElementById('test'))
+
+</script>
+</html>

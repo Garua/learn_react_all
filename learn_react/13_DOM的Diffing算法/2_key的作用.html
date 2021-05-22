@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+
+
+<script type="text/babel">
+    /***
+     *
+     * 经典面试题:
+     *  1,react/vue中的key有什么作用(key的内部原理是什么)
+     *  2,为什么遍历列表时,key最好不要用index
+     *
+     *  1,虚拟DOM中的key的作用:
+     *      1,简单来说,key是虚拟DOM中的对象的标识,在更新显示时key起着极其重要的作用
+     *      2,详细的说:当状态中的数据发生变化时,react会根据[新数据]生成新的虚拟DOM
+     *          随后react进行[新虚拟DOM]与[旧虚拟DOM]的diff比较.
+     *              a:旧虚拟DOM中找到了与新虚拟DOM相同的key:
+     *                1.若虚拟DOM中的内容没有变,直接使用之前的真实DOM
+     *                2.若虚拟DOM中的内容变了,则生成新的真实DOM,随后替换页面中之前的真实DOM
+     *              b:旧虚拟DOM中未找到与新虚拟DOM相同的key
+     *                根据数据创建新的真实DOM,随后渲染到页面上
+     *  2,用index作为key时可能会引发的问题:
+     *     1.若对数据进行:逆序添加,逆序删除等破坏顺序的操作
+     *       会产生没有必要的真实DOM==>页面效果没有问题,但是效率低
+     *     2.如果结构中还包含输入类的DOM(下拉,单选,select等):
+     *       会产生错误DOM更新==>界面有问题(下面例子中li标签中的输入框,错位了,
+     *       diff算法会一层一层的对比标签,input(但是真实dom中有内容)中内容一样复用,
+     *       虚拟dom的Input没有value,但是真实dom有,所以才认为input一样)
+     *     3.注意!如果不存在对数据的逆序添加,逆序删除等破坏顺序的操作,
+     *       仅用于渲染列表用于展示时,使用index作为key是没有问题的
+     *  3,开发中如何选择key?
+     *      1.最好使用每条数据的唯一标识作为key,如id,手机号,身份证号等唯一值
+     *      2.如果确定只是简单的展示数据,用index也是可以的
+     *
+     *
+     *
+     *
+     */
+
+
+    /***
+     * 慢动作回放,使用index作为key
+     * 数据:
+     *  {id: 1, name: '小张', age: 19},
+     *  {id: 2, name: '小李', age: 29},
+     *  初始虚拟DOM
+     *  <li key=0>小张--19<input type="text"/></li>
+     *  <li key=1>小李--29<input type="text"/></li>
+     *  更新后的数据
+     *
+     *    {id: 3, name: '小王', age: 18},
+     *    {id: 1, name: '小张', age: 19},
+     *    {id: 2, name: '小李', age: 29},
+     *    更新数据后的虚拟DOM               新旧DOM对比
+     *     <li key=0>小王--18<input type="text"/></li>    |  key = 0有,对于内容,对不上,生成新的真实DOM,替换页面上的
+     *     <li key=1>小张--19<input type="text"/></li>    |  key = 1同上
+     *     <li key=2>小李--29<input type="text"/></li>    |  key = 2,没有,直接生成新的真实DOM,
+     *     ----------------------------------------------------------------
+     *     慢动作回放,使用index作为key
+     *  数据:
+     *  {id: 1, name: '小张', age: 19},
+     *  {id: 2, name: '小李', age: 29},
+     *  初始虚拟DOM
+     *  <li key=1>小张--19</li>
+     *  <li key=2>小李--29</li>
+     *  更新后的数据
+     *  {id: 3, name: '小王', age: 18},
+     *  {id: 1, name: '小张', age: 19},
+     *  {id: 2, name: '小李', age: 29},
+     *  更新数据后的虚拟DOM               新旧DOM对比
+     *  <li key=3>小王--18</li>    |  key = 3 没有,直接生成新的真实DOM
+     *  <li key=1>小张--19</li>    |  key = 1 有,对比内容,发生相同,复用
+     *  <li key=2>小李--29</li>    |  key = 2 同key=1
+
+     *
+     */
+    class Person extends React.Component {
+        state = {
+            persons: [
+                {id: 1, name: '小张', age: 19},
+                {id: 2, name: '小李', age: 29},
+            ]
+        }
+        add = () => {
+            const {persons} = this.state
+            const p = {id: persons.length + 1, name: '小王', age: 18}
+            this.setState({persons: [p, ...persons]})
+        }
+
+        render() {
+            // h1和input不会重新渲染,因为Input中输入值,不会被刷新
+            // key用遍历时,key用index时,会出现效率问题
+            return (
+                <div>
+                    <h2>展示人员信息(index)</h2>
+                    <button onClick={this.add}>添加一个人员</button>
+                    <ul>
+                        {
+                            this.state.persons.map((person, index) => {
+                                return <li key={index}>{person.name}--{person.age}<input type="text"/></li>
+                            })
+                        }
+                    </ul>
+                    <hr/>
+                    <h2>展示人员信息(id)</h2>
+                    <ul>
+                        {
+                            this.state.persons.map((person, index) => {
+                                return <li key={person.id}>{person.name}--{person.age}<input type="text"/></li>
+                            })
+                        }
+                    </ul>
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(<Person/>, document.getElementById('test'))
+</script>
+</html>

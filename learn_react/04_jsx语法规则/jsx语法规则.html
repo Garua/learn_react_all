@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建虚拟dom的2种方式</title>
+</head>
+<style>
+    .title {
+        background: orange;
+    }
+</style>
+<!--核心库须先引入-->
+<script src="../js/react.development.js" type="text/javascript"></script>
+<!--操作dom的库-->
+<script src="../js/react-dom.development.js" type="text/javascript"></script>
+<!--将jsx转为js-->
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<body>
+<div id="test"></div>
+</body>
+<!--此处type是text/babel-->
+<script type="text/babel">
+    /**
+     * 虚拟dom:
+     * 1,定义虚拟dom的时候不加引号
+     * 2、标签中混入js表达式时要用{}包裹
+     * 3、样式的类名指定不用class,要用className
+     * 4、内联样式用{{}}包裹，为key-value键值对。外层{}代表是js表达式，里面层{}代表是对象
+     * 5、只能有一个要标签
+     * 6、标签必须要关闭
+     * 7、关于标签首字母：
+     *    >若小写字母开头，则转换成html中的同名元素，若标签中的没有同名元素，则报错
+     *    >若大写字母开头，react就去渲染对应的组件中，若组件没有定义，则报错
+     * */
+
+    const myId = "looCC"
+    const myData = "zhouHongGUNAG"
+
+
+    //   创建虚拟dom  会翻译成    const VDom = React.createElement('h1',{id:'title'},'hello_原生创建') 这种形式
+    /*此处没有引号，因为不是字符串*/
+    /*fontSize要是小驼峰形式*/
+    const VDom = (
+        <div>
+            <h1 className="title" id={myId}>
+            <span style={{color: 'red', fontSize: '10px'}}>
+        {myData}
+              </span>
+            </h1>
+
+            <h1 className="title" id={myId.toLocaleLowerCase()}>
+            <span style={{color: 'red', fontSize: '10px'}}>
+                  {myData}
+            </span>
+            </h1>
+            <Good>good标签中</Good>
+        </div>
+    )
+    // 渲染dom到页面
+    ReactDOM.render(VDom, document.getElementById("test"))
+</script>
+</html>
